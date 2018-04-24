@@ -11,8 +11,6 @@ import java.util.List;
 import classes.Farmacie;
 import classes.Med_Farmacie;
 import classes.Medicament;
-import classes.Produs;
-import classes.Stoc;
 import interfaces.Medicamentinter;
 
 public class MedicamentReal implements Medicamentinter{
@@ -53,7 +51,7 @@ public class MedicamentReal implements Medicamentinter{
 		  conn = (Connection) DriverManager.getConnection(DB_URL,USER,PASS);
 	            stmt = (Statement) conn.createStatement();
 			      String sql;
-			      sql = "SELECT mf.* FROM med_mfarmacie mf WHERE mf.id_medicament="+pid;
+			      sql = "SELECT mf.* FROM med_farmacie mf WHERE mf.id_medicament="+pid;
 			      ResultSet rs = stmt.executeQuery(sql);
 			      
 	                      while(rs.next())
@@ -90,7 +88,7 @@ public class MedicamentReal implements Medicamentinter{
 		  conn = (Connection) DriverManager.getConnection(DB_URL,USER,PASS);
 	            stmt = (Statement) conn.createStatement();
 			      String sql;
-			      sql = "SELECT mf.* FROM med_mfarmacie mf,medicament m WHERE mf.id_medicament=m.id_medicament AND m.nume='"+med+"'";
+			      sql = "SELECT mf.* FROM med_farmacie mf,medicament m WHERE mf.id_medicament=m.id_medicament AND m.nume='"+med+"'";
 			      ResultSet rs = stmt.executeQuery(sql);
 			      
 	                      while(rs.next())
@@ -120,73 +118,27 @@ public class MedicamentReal implements Medicamentinter{
 	       return ls;
 	}
 
-	public Stoc getStoc(Produs p, Farmacie f) throws RemoteException {
-		if(!(this.host.equals(p.getHost())&&this.dbase.equals(p.getDBase()))||!(this.host.equals(f.getHost())&&this.dbase.equals(f.getDBase())))
-			return null;
-		return this.getStoc(p.getID(), f.getID());
-	}
-
+	
+	
 	@Override
-	public Stoc getStoc(int pid, int fid) throws RemoteException {
-	   Stoc ls=null;
-	     int id,pret,cantitate;  
-	        try{Class.forName(JDBC_DRIVER);
-		  System.out.println("Connecting to database...");
-		  conn = (Connection) DriverManager.getConnection(DB_URL,USER,PASS);
-	            stmt = (Statement) conn.createStatement();
-			      String sql;
-			      sql = "SELECT S.ID,S.FID,S.PID,S.PRET,S.CANTITATE FROM PRODUS P,STOC S WHERE S.PID="+pid+" AND S.FID="+fid;
-			      ResultSet rs = stmt.executeQuery(sql);
-			      
-	                      while(rs.next())
-	                      {id=rs.getInt("ID");
-	                      fid=rs.getInt("FID");
-	                      pret=rs.getInt("PRET");
-	                     cantitate=rs.getInt("CANTITATE");
-	                      ls=new Stoc(id,fid,pid,pret,cantitate,host,dbase);
-	                      }
-			     
-			      rs.close();
-			      stmt.close();
-			      conn.close();
-			   }catch(SQLException se){
-			      se.printStackTrace();
-			   }catch(Exception e){
-			      e.printStackTrace();
-			   }finally{
-			      try{
-			         if(stmt!=null)
-			            stmt.close();
-			      }catch(SQLException se2){}
-			      try{  if(conn!=null)
-			            conn.close();
-			      }catch(SQLException se){se.printStackTrace();}
-			   }
-	       return ls;
-	}
-
-	@Override
-	public List<Farmacie> getFarm(int pid) throws RemoteException 
-		{
-		    List<Farmacie> ls=new ArrayList<Farmacie>();
-		    int id;
-		    String nume,adresa,nrtel,oras,program;  
+	public List<Farmacie> getFarm(int id_med) throws RemoteException 
+		{List<Farmacie> ls=new ArrayList<Farmacie>();
+	      int id;      
+	      String nume,adresa,nrtel;  
 		        try{Class.forName(JDBC_DRIVER);
 			  System.out.println("Connecting to database...");
 			  conn = (Connection) DriverManager.getConnection(DB_URL,USER,PASS);
 		            stmt = (Statement) conn.createStatement();
 				      String sql;
-				      sql = "SELECT F.* FROM PRODUS P,STOC S,FARMACIE F WHERE S.FID=F.ID AND S.PID="+pid;
+				      sql = "SELECT m.* FROM farmacie f,med_farmacie mf,medicament m WHERE mf.id_medicament=m.id_medicament AND f.id_farmacie=mf.id_farmacie AND m.id_medicament="+id_med;
 				      ResultSet rs = stmt.executeQuery(sql);
 				      
 		                      while(rs.next())
-		                      {id=rs.getInt("ID");
-		                      nume=rs.getString("NUME");
-		                      adresa=rs.getString("ADRESA");
-		                      nrtel=rs.getString("NRTEL");
-		                      oras=rs.getString("ORAS");
-		                      program=rs.getString("PROGRAM");
-		                      ls.add(new Farmacie(id,nume,adresa,nrtel,oras,program,host,dbase));
+		                      {id  = rs.getInt("id_farmacie");
+		     		         nume = rs.getString("nume");
+	                         adresa = rs.getString("adresa");
+	                         nrtel = rs.getString("telefon");
+	                         ls.add(new Farmacie(id,nume,adresa,nrtel,host,dbase));
 		                      }
 				     
 				      rs.close();
@@ -207,68 +159,79 @@ public class MedicamentReal implements Medicamentinter{
 				   }
 		       return ls;
 		}
-
-	@Override
-	public Stoc getStoc(String p, String f) throws RemoteException {
-	    Stoc ls=null;
-	     int id,pret,pid,fid,cantitate;  
-	        try{Class.forName(JDBC_DRIVER);
-		  System.out.println("Connecting to database...");
-		  conn = (Connection) DriverManager.getConnection(DB_URL,USER,PASS);
-	            stmt = (Statement) conn.createStatement();
-			      String sql;
-			      sql = "SELECT S.ID,S.FID,S.PID,S.PRET,S.CANTITATE FROM PRODUS P,STOC S,FARMACIE F WHERE S.FID=F.ID AND S.PID=P.ID AND P.NUME='"+p+"' AND F.NUME='"+f+"'";
-			      ResultSet rs = stmt.executeQuery(sql);
-			      
-	                      while(rs.next())
-	                      {id=rs.getInt("ID");
-	                      fid=rs.getInt("FID");
-	                      pid=rs.getInt("PID");
-	                      pret=rs.getInt("PRET");
-	                     cantitate=rs.getInt("CANTITATE");
-	                      ls=new Stoc(id,fid,pid,pret,cantitate,host,dbase);
-	                      }
-			     
-			      rs.close();
-			      stmt.close();
-			      conn.close();
-			   }catch(SQLException se){
-			      se.printStackTrace();
-			   }catch(Exception e){
-			      e.printStackTrace();
-			   }finally{
-			      try{
-			         if(stmt!=null)
-			            stmt.close();
-			      }catch(SQLException se2){}
-			      try{  if(conn!=null)
-			            conn.close();
-			      }catch(SQLException se){se.printStackTrace();}
-			   }
-	       return ls;
-	}
-
+	
+	
+	
 	@Override
 	public List<Farmacie> getFarm(String p) throws RemoteException {
-	    List<Farmacie> ls=new ArrayList<Farmacie>();
-	    int id;
-	    String nume,adresa,nrtel,oras,program;  
+		{List<Farmacie> ls=new ArrayList<Farmacie>();
+	      int id;      
+	      String nume,adresa,nrtel;  
+		        try{Class.forName(JDBC_DRIVER);
+			  System.out.println("Connecting to database...");
+			  conn = (Connection) DriverManager.getConnection(DB_URL,USER,PASS);
+		            stmt = (Statement) conn.createStatement();
+				      String sql;
+				      sql = "SELECT m.* FROM farmacie f,med_farmacie mf,medicament m WHERE mf.id_medicament=m.id_medicament AND f.id_farmacie=mf.id_farmacie AND m.nume="+p;
+				      ResultSet rs = stmt.executeQuery(sql);
+				      
+		                      while(rs.next())
+		                      {id  = rs.getInt("id_farmacie");
+		     		         nume = rs.getString("nume");
+	                         adresa = rs.getString("adresa");
+	                         nrtel = rs.getString("telefon");
+	                         ls.add(new Farmacie(id,nume,adresa,nrtel,host,dbase));
+		                      }
+				     
+				      rs.close();
+				      stmt.close();
+				      conn.close();
+				   }catch(SQLException se){
+				      se.printStackTrace();
+				   }catch(Exception e){
+				      e.printStackTrace();
+				   }finally{
+				      try{
+				         if(stmt!=null)
+				            stmt.close();
+				      }catch(SQLException se2){}
+				      try{  if(conn!=null)
+				            conn.close();
+				      }catch(SQLException se){se.printStackTrace();}
+				   }
+		       return ls;
+		}
+	}
+	
+	public List<Farmacie> getFarm(Medicament p) throws RemoteException {
+		if(!(this.host.equals(p.getHost())&&this.dbase.equals(p.getDBase())))
+	    	return null;
+		return this.getFarm(p.getID());
+	}
+	
+	
+	public Med_Farmacie getMed_Farm(Medicament p,Farmacie f) throws RemoteException {
+		if(!(this.host.equals(p.getHost())&&this.dbase.equals(p.getDBase()))||!(this.host.equals(f.getHost())&&this.dbase.equals(f.getDBase())))
+			return null;
+		return this.getMed_Farm(p.getID(), f.getID());
+	}
+
+	@Override
+	public Med_Farmacie getMed_Farm(int med,int farm)throws RemoteException {
+		int id,cant;      
+        Med_Farmacie s=null;  
 	        try{Class.forName(JDBC_DRIVER);
 		  System.out.println("Connecting to database...");
 		  conn = (Connection) DriverManager.getConnection(DB_URL,USER,PASS);
 	            stmt = (Statement) conn.createStatement();
 			      String sql;
-			      sql = "SELECT F.* FROM PRODUS P,STOC S,FARMACIE F WHERE S.FID=F.ID AND F.NUME='"+p+"'";
+			      sql = "SELECT mf.* FROM med_farmacie mf WHERE mf.id_medicament="+med+"  AND mf.id_farmacie="+farm;
 			      ResultSet rs = stmt.executeQuery(sql);
 			      
 	                      while(rs.next())
-	                      {id=rs.getInt("ID");
-	                      nume=rs.getString("NUME");
-	                      adresa=rs.getString("ADRESA");
-	                      nrtel=rs.getString("NRTEL");
-	                      oras=rs.getString("ORAS");
-	                      program=rs.getString("PROGRAM");
-	                      ls.add(new Farmacie(id,nume,adresa,nrtel,oras,program,host,dbase));
+	                      {id  = rs.getInt("id_medfarm");
+	                      cant  = rs.getInt("cantitate");
+	                       s=new Med_Farmacie(farm, med, id, cant, host, dbase);
 	                      }
 			     
 			      rs.close();
@@ -287,7 +250,50 @@ public class MedicamentReal implements Medicamentinter{
 			            conn.close();
 			      }catch(SQLException se){se.printStackTrace();}
 			   }
-	       return ls;
+	       return s;
 	}
+
+	
+
+	@Override
+	public Med_Farmacie getMed_Farm(String m,String f) throws RemoteException {
+		int id,fid,pid,cant;      
+        Med_Farmacie s=null; 
+	        try{Class.forName(JDBC_DRIVER);
+		  System.out.println("Connecting to database...");
+		  conn = (Connection) DriverManager.getConnection(DB_URL,USER,PASS);
+	            stmt = (Statement) conn.createStatement();
+			      String sql;
+			      sql = "SELECT m.* FROM farmacie f,med_farmacie mf,medicament m WHERE mf.id_medicament=m.id_medicament AND f.id_farmacie=mf.id_farmacie AND m.nume="+m+"AND f.nume='"+f+"'";
+			      ResultSet rs = stmt.executeQuery(sql);
+			      
+	                      while(rs.next())
+	                      {id  = rs.getInt("id_medfarm");
+	                       fid  = rs.getInt("id_farmacie");
+	                       pid  = rs.getInt("id_medicament");
+	                      cant  = rs.getInt("cantitate");
+	                       s=new Med_Farmacie(fid, pid, id, cant, host, dbase);
+	                      }
+			     
+			      rs.close();
+			      stmt.close();
+			      conn.close();
+			   }catch(SQLException se){
+			      se.printStackTrace();
+			   }catch(Exception e){
+			      e.printStackTrace();
+			   }finally{
+			      try{
+			         if(stmt!=null)
+			            stmt.close();
+			      }catch(SQLException se2){}
+			      try{  if(conn!=null)
+			            conn.close();
+			      }catch(SQLException se){se.printStackTrace();}
+			   }
+	       return s;
+	}
+
+	
 
 }

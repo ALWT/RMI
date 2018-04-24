@@ -4,8 +4,6 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
 
 import classes.*;
-import classes.Produs;
-import classes.Stoc;
 import interfaces.*;
 import implement.*;
 
@@ -30,10 +28,10 @@ public class MainRMI {
             String name1 = "DB-"+dba;
             DBManageinter db = new DBManageReal(host,dba,user,pass);
             DBManageinter db_stub=(DBManageinter) UnicastRemoteObject.exportObject(db, 0);
-            String name2 = "Produs-"+dba;
+            String name2 = "Medicament-"+dba;
             Medicamentinter prod = new MedicamentReal(host,dba,user,pass);
             Medicamentinter prod_stub =(Medicamentinter) UnicastRemoteObject.exportObject(prod, 0);
-            String name3 = "Stoc-"+dba;
+            String name3 = "Med_Farm-"+dba;
             Med_Farmacieinter st = new Med_FarmacieReal(host,dba,user,pass);
             Med_Farmacieinter st_stub =(Med_Farmacieinter) UnicastRemoteObject.exportObject(st, 0);
             String name4 = "Farmacie-"+dba;
@@ -50,13 +48,8 @@ public class MainRMI {
             System.out.println("Farmacie bound");
             l=db.getFarmacii();
     	for(Farmacie f:l)
-    	{System.out.println(f.getHost()+" "+f.getID()+"  "+f.getNume()+" "+f.getOras()+" "+f.getAdresa()+" "+f.getProgram()+" "+f.getNrtel());
-    	for(Produs p:fa.getProductsFarmacie(f))
-    		System.out.println(p.getID()+" "+p.getNume()+" "+p.getClasa());
-    	for(Stoc s:fa.getStocFarmacie(f))
-    	   System.out.println(s.getCantitate()+" "+s.getPret());
-    	for(Stoc s:prod.getStoc("Amoxicilina"))
-    	System.out.println(s.getCantitate()+" "+s.getPret());}
+    	{System.out.println(f.getHost()+" "+f.getID()+"  "+f.getNume()+" "+f.getAdresa()+" "+f.getNrtel());
+    	}
       } catch (Exception e) {
             System.err.println("ComputeEngine exception:");
             e.printStackTrace();

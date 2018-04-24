@@ -52,7 +52,7 @@ public class FarmacieReal implements Farmacieinter {
 	  conn = (Connection) DriverManager.getConnection(DB_URL,USER,PASS);
             stmt = (Statement) conn.createStatement();
 		      String sql;
-		      sql = "SELECT m.* FROM farmacie f,medicament m,med_mfarmacie mf WHERE f.id_farmacie="+fid+" AND m.id_medicament=mf.id_medicament";
+		      sql = "SELECT m.* FROM farmacie f,medicament m,med_farmacie mf WHERE f.id_farmacie="+fid+" AND m.id_medicament=mf.id_medicament";
 		      ResultSet rs = stmt.executeQuery(sql);
 		      
                       while(rs.next())
@@ -96,7 +96,7 @@ public class FarmacieReal implements Farmacieinter {
 		  conn = (Connection) DriverManager.getConnection(DB_URL,USER,PASS);
 	            stmt = (Statement) conn.createStatement();
 			      String sql;
-			      sql = "SELECT m.* FROM farmacie f,medicament m,med_mfarmacie mf WHERE f.nume='"+f+"' AND m.id_medicament=mf.id_medicament";
+			      sql = "SELECT m.* FROM farmacie f,medicament m,med_farmacie mf WHERE f.nume='"+f+"' AND m.id_medicament=mf.id_medicament";
 			      ResultSet rs = stmt.executeQuery(sql);
 			      
 	                      while(rs.next())
@@ -142,7 +142,7 @@ public class FarmacieReal implements Farmacieinter {
 	 conn = (Connection) DriverManager.getConnection(DB_URL,USER,PASS);
 	      stmt = (Statement) conn.createStatement();
 		      String sql;
-		      sql = "SELECT mf.* FROM med_mfarmacie mf WHERE mf.id_farmacie="+fid;
+		      sql = "SELECT mf.* FROM med_farmacie mf WHERE mf.id_farmacie="+fid;
 		      ResultSet rs = stmt.executeQuery(sql);
 		      
 	                 while(rs.next())
@@ -179,7 +179,7 @@ public class FarmacieReal implements Farmacieinter {
 	 conn = (Connection) DriverManager.getConnection(DB_URL,USER,PASS);
 	      stmt = (Statement) conn.createStatement();
 		      String sql;
-		      sql = "SELECT mf.* FROM med_mfarmacie mf,farmacie f WHERE mf.id_farmacie=f.id_farmacie AND f.nume='"+f+"'";
+		      sql = "SELECT mf.* FROM med_farmacie mf,farmacie f WHERE mf.id_farmacie=f.id_farmacie AND f.nume='"+f+"'";
 		      ResultSet rs = stmt.executeQuery(sql);
 		      
 	                 while(rs.next())

@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import classes.Farmacie;
+import classes.Med_Farmacie;
+import classes.Medicament;
 import classes.Produs;
 import classes.Stoc;
 import interfaces.Medicamentinter;
@@ -36,30 +38,67 @@ public class MedicamentReal implements Medicamentinter{
     {return this.host;}
     
 	@Override
-	public List<Stoc> getStoc(Produs p) throws RemoteException {
+	public List<Med_Farmacie> getMed_Farm(Medicament p) throws RemoteException {
 		if(!(this.host.equals(p.getHost())&&this.dbase.equals(p.getDBase())))
 	    	return null;
-		return this.getStoc(p.getID());
+		return this.getMed_Farm(p.getID());
 	}
 
 	@Override
-	public List<Stoc> getStoc(int pid) throws RemoteException {
-	    List<Stoc> ls=new ArrayList<Stoc>();
-	     int id,fid,pret,cantitate;  
+	public List<Med_Farmacie> getMed_Farm(int pid) throws RemoteException {
+		List<Med_Farmacie> ls=new ArrayList<Med_Farmacie>();
+		int id_farmacie,id_med_farm,cantitate;
 	        try{Class.forName(JDBC_DRIVER);
 		  System.out.println("Connecting to database...");
 		  conn = (Connection) DriverManager.getConnection(DB_URL,USER,PASS);
 	            stmt = (Statement) conn.createStatement();
 			      String sql;
-			      sql = "SELECT S.ID,S.FID,S.PID,S.PRET,S.CANTITATE FROM PRODUS P,STOC S WHERE S.PID="+pid;
+			      sql = "SELECT mf.* FROM med_mfarmacie mf WHERE mf.id_medicament="+pid;
 			      ResultSet rs = stmt.executeQuery(sql);
 			      
 	                      while(rs.next())
-	                      {id=rs.getInt("ID");
-	                      fid=rs.getInt("FID");
-	                      pret=rs.getInt("PRET");
-	                     cantitate=rs.getInt("CANTITATE");
-	                      ls.add(new Stoc(id,fid,pid,pret,cantitate,host,dbase));
+	                      {id_farmacie=rs.getInt("id_farmacie");
+	 	                 id_med_farm=rs.getInt("id_med_farm");
+		                 cantitate=rs.getInt("cantitate");
+		           	 ls.add(new Med_Farmacie(id_farmacie,pid,id_med_farm,cantitate,host,dbase));
+	                      }
+			     
+			      rs.close();
+			      stmt.close();
+			      conn.close();
+			   }catch(SQLException se){
+			      se.printStackTrace();
+			   }catch(Exception e){
+			      e.printStackTrace();
+			   }finally{
+			      try{
+			         if(stmt!=null)
+			            stmt.close();
+			      }catch(SQLException se2){}
+			      try{  if(conn!=null)
+			            conn.close();
+			      }catch(SQLException se){se.printStackTrace();}
+			   }
+	       return ls;
+	}
+	
+	public List<Med_Farmacie> getMed_Farm(String med) throws RemoteException {
+		List<Med_Farmacie> ls=new ArrayList<Med_Farmacie>();
+		int id_medicament,id_med_farm,cantitate,id_farmacie; 
+	        try{Class.forName(JDBC_DRIVER);
+		  System.out.println("Connecting to database...");
+		  conn = (Connection) DriverManager.getConnection(DB_URL,USER,PASS);
+	            stmt = (Statement) conn.createStatement();
+			      String sql;
+			      sql = "SELECT mf.* FROM med_mfarmacie mf,medicament m WHERE mf.id_medicament=m.id_medicament AND m.nume='"+med+"'";
+			      ResultSet rs = stmt.executeQuery(sql);
+			      
+	                      while(rs.next())
+	                      {id_farmacie=rs.getInt("id_farmacie");
+	                      id_medicament=rs.getInt("id_medicament");
+	 	                 id_med_farm=rs.getInt("id_med_farm");
+		                 cantitate=rs.getInt("cantitate");
+		           	 ls.add(new Med_Farmacie(id_farmacie,id_medicament,id_med_farm,cantitate,host,dbase));
 	                      }
 			     
 			      rs.close();
@@ -170,46 +209,6 @@ public class MedicamentReal implements Medicamentinter{
 		}
 
 	@Override
-	public List<Stoc> getStoc(String p) throws RemoteException {
-	    List<Stoc> ls=new ArrayList<Stoc>();
-	     int id,pret,pid,fid,cantitate;  
-	        try{Class.forName(JDBC_DRIVER);
-		  System.out.println("Connecting to database...");
-		  conn = (Connection) DriverManager.getConnection(DB_URL,USER,PASS);
-	            stmt = (Statement) conn.createStatement();
-			      String sql;
-			      sql = "SELECT S.ID,S.FID,S.PID,S.PRET,S.CANTITATE FROM PRODUS P,STOC S WHERE S.PID=P.ID AND P.NUME='"+p+"'";
-			      ResultSet rs = stmt.executeQuery(sql);
-			      
-	                      while(rs.next())
-	                      {id=rs.getInt("ID");
-	                      fid=rs.getInt("FID");
-	                      pid=rs.getInt("PID");
-	                      pret=rs.getInt("PRET");
-	                     cantitate=rs.getInt("CANTITATE");
-	                      ls.add(new Stoc(id,fid,pid,pret,cantitate,host,dbase));
-	                      }
-			     
-			      rs.close();
-			      stmt.close();
-			      conn.close();
-			   }catch(SQLException se){
-			      se.printStackTrace();
-			   }catch(Exception e){
-			      e.printStackTrace();
-			   }finally{
-			      try{
-			         if(stmt!=null)
-			            stmt.close();
-			      }catch(SQLException se2){}
-			      try{  if(conn!=null)
-			            conn.close();
-			      }catch(SQLException se){se.printStackTrace();}
-			   }
-	       return ls;
-	}
-
-	@Override
 	public Stoc getStoc(String p, String f) throws RemoteException {
 	    Stoc ls=null;
 	     int id,pret,pid,fid,cantitate;  
@@ -291,11 +290,4 @@ public class MedicamentReal implements Medicamentinter{
 	       return ls;
 	}
 
-
-	@Override
-	public List<Farmacie> getFarm(Produs p) throws RemoteException {
-		if(!(this.host.equals(p.getHost())&&this.dbase.equals(p.getDBase())))
-			return null;
-		return this.getFarm(p.getID());
-	}
 }

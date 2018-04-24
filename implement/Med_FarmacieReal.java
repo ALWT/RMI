@@ -7,8 +7,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import classes.Farmacie;
-import classes.Produs;
-import classes.Stoc;
+import classes.Med_Farmacie;
+import classes.Medicament;
 import interfaces.Med_Farmacieinter;
 
 public class Med_FarmacieReal implements Med_Farmacieinter {
@@ -36,24 +36,22 @@ public class Med_FarmacieReal implements Med_Farmacieinter {
 	@Override
 	public Farmacie getFarm(int sid) throws RemoteException {
 	    Farmacie f=null;
-	    int id;
-	    String nume,adresa,nrtel,oras,program;  
+	    int id;      
+	      String nume,adresa,nrtel; 
 	        try{Class.forName(JDBC_DRIVER);
 		  System.out.println("Connecting to database...");
 		  conn = (Connection) DriverManager.getConnection(DB_URL,USER,PASS);
 	            stmt = (Statement) conn.createStatement();
 			      String sql;
-			      sql = "SELECT F.* FROM STOC S,FARMACIE F WHERE S.FID=F.ID AND S.ID="+sid;
+			      sql = "SELECT f.* FROM med_farmacie mf,farmacie f WHERE mf.id_farmacie=f.id_farmacie AND mf.id_med_farm="+sid;
 			      ResultSet rs = stmt.executeQuery(sql);
 			      
 	                      if(rs.next())
-	                      {id=rs.getInt("ID");
-	                      nume=rs.getString("NUME");
-	                      adresa=rs.getString("ADRESA");
-	                      nrtel=rs.getString("NRTEL");
-	                      oras=rs.getString("ORAS");
-	                      program=rs.getString("PROGRAM");
-	                      f=new Farmacie(id,nume,adresa,nrtel,oras,program,host,dbase);
+	                      {id  = rs.getInt("id_farmacie");
+		                  nume = rs.getString("nume");
+                         adresa = rs.getString("adresa");
+                         nrtel = rs.getString("telefon");
+                         f=(new Farmacie(id,nume,adresa,nrtel,host,dbase));
 	                      }
 			     
 			      rs.close();
@@ -76,30 +74,33 @@ public class Med_FarmacieReal implements Med_Farmacieinter {
 	}
 
 	@Override
-	public Farmacie getFarm(Stoc s) throws RemoteException {
+	public Farmacie getFarm(Med_Farmacie s) throws RemoteException {
 		if(!(this.host.equals(s.getHost())&&this.dbase.equals(s.getDBase())))
 			return null;
-		return this.getFarm(s.getID());
+		return this.getFarm(s.getIDMedFarm());
 	}
 
 	@Override
-	public Produs getProdus(int sid) throws RemoteException {
-	    Produs p=null;
-	     int id;
-	        String nume,clasa;      
+	public Medicament getMedicament(int id_med_farm) throws RemoteException {
+		int id_medicament;
+	       Medicament p=null;
+	        String nume,poza,descriere;
+	        double pret;     
 	        try{Class.forName(JDBC_DRIVER);
 		  System.out.println("Connecting to database...");
 		  conn = (Connection) DriverManager.getConnection(DB_URL,USER,PASS);
 	            stmt = (Statement) conn.createStatement();
 			      String sql;
-			      sql = "SELECT P.ID,P.NUME,P.CLASA FROM FARMACIE F,PRODUS P,STOC S WHERE S.PID="+sid+" AND S.PID=P.ID";
+			      sql = "SELECT m.* FROM medicament m,med_farmacie mf WHERE m.id_medicament=mf.id_medicament AND mf.id_med_farm="+id_med_farm;
 			      ResultSet rs = stmt.executeQuery(sql);
 			      
 	                      if(rs.next())
-	                      {id  = rs.getInt("ID");
-	                       nume  = rs.getString("NUME");
-	                       clasa  = rs.getString("CLASA");
-	                      p=new Produs(id,nume,clasa,this.host,dbase);
+	                      {id_medicament=rs.getInt("id_medicament");
+	                      nume=rs.getString("nume");
+	                      pret=rs.getDouble("pret");
+	                      poza=rs.getString("poza");
+	                      descriere=rs.getString("descriere");
+	                      p=new Medicament(id_medicament,nume, pret, poza, descriere, host, dbase);
 	                      }
 			     
 			      rs.close();
@@ -121,9 +122,9 @@ public class Med_FarmacieReal implements Med_Farmacieinter {
 	       return p;}
 
 	@Override
-	public Produs getProdus(Stoc s) throws RemoteException {
+	public Medicament getMedicament(Med_Farmacie s) throws RemoteException {
 		if(!(this.host.equals(s.getHost())&&this.dbase.equals(s.getDBase())))
 			return null;
-		return this.getProdus(s.getID());
+		return this.getMedicament(s.getIDMedFarm());
 	}
 }

@@ -9,9 +9,9 @@ import java.sql.Statement;
 import classes.Farmacie;
 import classes.Produs;
 import classes.Stoc;
-import interfaces.Stocinter;
+import interfaces.Med_Farmacieinter;
 
-public class StocReal implements Stocinter {
+public class Med_FarmacieReal implements Med_Farmacieinter {
 	private String JDBC_DRIVER = "com.mysql.jdbc.Driver",host;  
 	private String DB_URL,dbase;
 	private String USER;
@@ -19,7 +19,7 @@ public class StocReal implements Stocinter {
 	private Connection conn = null;
 	private Statement stmt = null;
 	
-    public StocReal(String host,String dbase,String USER,String PASS)
+    public Med_FarmacieReal(String host,String dbase,String USER,String PASS)
     {this.host=host;
      this.dbase=(dbase==null)?"Test":dbase;
      this.USER=(USER==null)?"root":USER;

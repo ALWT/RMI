@@ -12,7 +12,6 @@ public interface DBManageinter extends Remote {
     public String getHost() throws RemoteException;
     public Medicament getMedicamentID(int PID) throws RemoteException;
     public Medicament getMedicamentName(String name) throws RemoteException;
-    public Medicament getMedicamentClass(String clasa) throws RemoteException;
     public Farmacist getFarmacist(int id_farmacist) throws RemoteException;
     public Farmacist getFarmacist(Farmacie farmacie) throws RemoteException;
     public Farmacist getFarmacist(String farmacist) throws RemoteException;

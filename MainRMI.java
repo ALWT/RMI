@@ -31,11 +31,11 @@ public class MainRMI {
             DBManageinter db = new DBManageReal(host,dba,user,pass);
             DBManageinter db_stub=(DBManageinter) UnicastRemoteObject.exportObject(db, 0);
             String name2 = "Produs-"+dba;
-            Produsinter prod = new ProdusReal(host,dba,user,pass);
-            Produsinter prod_stub =(Produsinter) UnicastRemoteObject.exportObject(prod, 0);
+            Medicamentinter prod = new MedicamentReal(host,dba,user,pass);
+            Medicamentinter prod_stub =(Medicamentinter) UnicastRemoteObject.exportObject(prod, 0);
             String name3 = "Stoc-"+dba;
-            Stocinter st = new StocReal(host,dba,user,pass);
-            Stocinter st_stub =(Stocinter) UnicastRemoteObject.exportObject(st, 0);
+            Med_Farmacieinter st = new Med_FarmacieReal(host,dba,user,pass);
+            Med_Farmacieinter st_stub =(Med_Farmacieinter) UnicastRemoteObject.exportObject(st, 0);
             String name4 = "Farmacie-"+dba;
             Farmacieinter fa = new FarmacieReal(host,dba,user,pass);
             Farmacieinter fa_stub =(Farmacieinter) UnicastRemoteObject.exportObject(fa, 0);

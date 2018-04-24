@@ -11,9 +11,9 @@ import java.util.List;
 import classes.Farmacie;
 import classes.Produs;
 import classes.Stoc;
-import interfaces.Produsinter;
+import interfaces.Medicamentinter;
 
-public class ProdusReal implements Produsinter{
+public class MedicamentReal implements Medicamentinter{
 	private String JDBC_DRIVER = "com.mysql.jdbc.Driver",host;  
 	private String DB_URL,dbase;
 	private String USER;
@@ -21,7 +21,7 @@ public class ProdusReal implements Produsinter{
 	private Connection conn = null;
 	private Statement stmt = null;
 	
-    public ProdusReal(String host,String dbase,String USER,String PASS)
+    public MedicamentReal(String host,String dbase,String USER,String PASS)
     {this.host=host;
      this.dbase=(dbase==null)?"Test":dbase;
      this.USER=(USER==null)?"root":USER;

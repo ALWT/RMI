@@ -6,17 +6,17 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import classes.Produs;
-import interfacesch.Produsinterch;
+import classes.Stoc;
+import interfacesch.Med_Farmacieinterch;
 
-public class Produsch implements Produsinterch {
+public class Med_Farmaciech implements Med_Farmacieinterch {
 	private String JDBC_DRIVER = "com.mysql.jdbc.Driver",host;  
 	private String DB_URL,dbase;
 	private String USER;
 	private String PASS;
 	private Connection conn = null;
 	private Statement stmt = null;
-    public Produsch(String host,String dbase,String USER,String PASS)
+    public Med_Farmaciech(String host,String dbase,String USER,String PASS)
     {this.host=host;
      this.dbase=(dbase==null)?"Test":dbase;
      this.USER=(USER==null)?"root":USER;
@@ -29,15 +29,15 @@ public class Produsch implements Produsinterch {
    
    public String getDBase() throws RemoteException
    {return this.dbase;}
-   
-	@Override
-	public void changeNume(int pid, String nume) throws RemoteException {
-		try{Class.forName(JDBC_DRIVER);
+	
+    @Override
+	public void changeQuantity(int sid, int quantity) throws RemoteException {
+    	try{Class.forName(JDBC_DRIVER);
 		  System.out.println("Connecting to database...");
 		  conn = (Connection) DriverManager.getConnection(DB_URL,USER,PASS);
 	          stmt = (Statement) conn.createStatement();
 			      String sql;
-			      sql = "UPDATE PRODUS SET NUME='"+nume+"' WHERE ID="+pid;
+			      sql = "UPDATE STOC SET CANTITATE='"+quantity+"' WHERE ID="+sid;
 			      stmt.executeUpdate(sql);
 			      stmt.close();
 			      conn.close();
@@ -56,19 +56,20 @@ public class Produsch implements Produsinterch {
 			   }}
 
 	@Override
-	public void changeNume(Produs p, String nume) throws RemoteException {
-		if(!(this.host.equals(p.getHost())&&this.dbase.equals(p.getDBase())))
+	public void changeQuantity(Stoc s, int quantity) throws RemoteException {
+		if(!(this.host.equals(s.getHost())&&this.dbase.equals(s.getDBase())))
 			return ;
-		this.changeNume(p.getID(), nume);}
+		this.changeQuantity(s.getID(), quantity);
+	}
 
 	@Override
-	public void changeClasa(int pid, String clasa) throws RemoteException {
+	public void changeValue(int sid, int value) throws RemoteException {
 		try{Class.forName(JDBC_DRIVER);
 		  System.out.println("Connecting to database...");
 		  conn = (Connection) DriverManager.getConnection(DB_URL,USER,PASS);
 	          stmt = (Statement) conn.createStatement();
 			      String sql;
-			      sql = "UPDATE PRODUS SET CLASA='"+clasa+"' WHERE ID="+pid;
+			      sql = "UPDATE STOC SET CANTITATE='"+value+"' WHERE ID="+sid;
 			      stmt.executeUpdate(sql);
 			      stmt.close();
 			      conn.close();
@@ -87,9 +88,9 @@ public class Produsch implements Produsinterch {
 			   }}
 
 	@Override
-	public void changeClasa(Produs p, String clasa) throws RemoteException {
-		if(!(this.host.equals(p.getHost())&&this.dbase.equals(p.getDBase())))
+	public void changeValue(Stoc s, int value) throws RemoteException {
+		if(!(this.host.equals(s.getHost())&&this.dbase.equals(s.getDBase())))
 			return ;
-		this.changeClasa(p.getID(), clasa);}
+		this.changeValue(s.getID(), value);}
 
 }

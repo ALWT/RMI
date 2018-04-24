@@ -6,15 +6,15 @@ public class Med_Farmacie implements java.io.Serializable
 {
 	private static final long serialVersionUID = 1L;
 	
-	private int id_farmacist;
+	private int id_medicament;
 	private int id_farmacie;
 	private int id_med_farm,cantitate;
     private String host,dbase;
     
-    public Med_Farmacie(int id_farmacie,int id_farmacist,int id_med_farm,int cantitate,String host,String dbase)
+    public Med_Farmacie(int id_farmacie,int id_medicament,int id_med_farm,int cantitate,String host,String dbase)
     {
     	this.id_farmacie=id_farmacie;
-    	this.id_farmacist=id_farmacist;
+    	this.id_medicament=id_medicament;
     	this.id_med_farm=id_med_farm;
 	    this.cantitate=cantitate;
 	    this.host=host;
@@ -24,9 +24,9 @@ public class Med_Farmacie implements java.io.Serializable
     {
     	return this.id_farmacie;
     }
-    public int getIDFarmacist() throws RemoteException
+    public int getIDMedicament() throws RemoteException
     {
-    	return this.id_farmacist;
+    	return this.id_medicament;
     }
     public int getIDMedFarm() throws RemoteException
     {

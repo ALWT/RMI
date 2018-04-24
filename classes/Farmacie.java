@@ -6,10 +6,10 @@ public class Farmacie implements java.io.Serializable
 {
 	private static final long serialVersionUID = 1L;
 	
-	private int id_farmacie,telefon;
-    private String nume,adresa,host,dbase;
+	private int id_farmacie;
+    private String nume,adresa,host,dbase,telefon;
     
-    public Farmacie(int id_farmacie,String nume,String adresa,int telefon,String host,String dbase)
+    public Farmacie(int id_farmacie,String nume,String adresa,String telefon,String host,String dbase)
     {
     	this.id_farmacie=id_farmacie;
 	    this.nume=nume;
@@ -39,7 +39,7 @@ public class Farmacie implements java.io.Serializable
     {
     	return this.adresa;
     }
-    public int getNrtel() throws RemoteException
+    public String getNrtel() throws RemoteException
     {
     	return this.telefon;
     }

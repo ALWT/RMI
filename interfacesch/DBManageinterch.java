@@ -6,7 +6,7 @@ import classes.*;
 
 public interface DBManageinterch extends Remote{//13 metode
 public void addFarmacie(String nume,String adresa,String nrtel) throws RemoteException;
-public void addMedicament(String nume,String desc,double pret) throws RemoteException;
+public void addMedicament(String nume,String desc,double pret,String poza) throws RemoteException;
 public void addMed_Farmacie(int id_farmacie,int id_medicament,int cantitate) throws RemoteException;
 public void addMed_Farmacie(String fNume,String pNume,int cantitate) throws RemoteException;
 public void addMed_Farmacie(Farmacie f,Medicament p,int cantitate) throws RemoteException;

@@ -40,7 +40,7 @@ public class FarmacieReal implements Farmacieinter {
     return this.getMedicamentsFarmacie(f.getID());}
      
 	@Override
-	public List<Medicament> getMedicamentsFarmacie(int fid) throws RemoteException { 
+	public List<Medicament> getMedicamentsFarmacie(int id_farmacie) throws RemoteException { 
     List<Medicament> ls=new ArrayList<Medicament>();
     int id_medicament;
     String nume;
@@ -52,7 +52,7 @@ public class FarmacieReal implements Farmacieinter {
 	  conn = (Connection) DriverManager.getConnection(DB_URL,USER,PASS);
             stmt = (Statement) conn.createStatement();
 		      String sql;
-		      sql = "SELECT m.* FROM farmacie f,medicament m,med_farmacie mf WHERE f.id_farmacie="+fid+" AND m.id_medicament=mf.id_medicament";
+		      sql = "SELECT m.* FROM farmacie f,medicament m,med_farmacie mf WHERE f.id_farmacie=mf.id_farmacie AND mf.id_medicament=m.id_medicament AND mf.id_farmacie="+id_farmacie;
 		      ResultSet rs = stmt.executeQuery(sql);
 		      
                       while(rs.next())

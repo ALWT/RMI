@@ -6,7 +6,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import classes.Stoc;
+import classes.Med_Farmacie;
 import interfacesch.Med_Farmacieinterch;
 
 public class Med_Farmaciech implements Med_Farmacieinterch {
@@ -31,13 +31,13 @@ public class Med_Farmaciech implements Med_Farmacieinterch {
    {return this.dbase;}
 	
     @Override
-	public void changeQuantity(int sid, int quantity) throws RemoteException {
+	public void changeQuantity(int id_med_farmacie, int quantity) throws RemoteException {
     	try{Class.forName(JDBC_DRIVER);
 		  System.out.println("Connecting to database...");
 		  conn = (Connection) DriverManager.getConnection(DB_URL,USER,PASS);
 	          stmt = (Statement) conn.createStatement();
 			      String sql;
-			      sql = "UPDATE STOC SET CANTITATE='"+quantity+"' WHERE ID="+sid;
+			      sql = "UPDATE med_farmacie SET cantitate="+quantity+" WHERE ID="+id_med_farmacie;
 			      stmt.executeUpdate(sql);
 			      stmt.close();
 			      conn.close();
@@ -56,41 +56,9 @@ public class Med_Farmaciech implements Med_Farmacieinterch {
 			   }}
 
 	@Override
-	public void changeQuantity(Stoc s, int quantity) throws RemoteException {
-		if(!(this.host.equals(s.getHost())&&this.dbase.equals(s.getDBase())))
+	public void changeQuantity(Med_Farmacie mf, int quantity) throws RemoteException {
+		if(!(this.host.equals(mf.getHost())&&this.dbase.equals(mf.getDBase())))
 			return ;
-		this.changeQuantity(s.getID(), quantity);
+		this.changeQuantity(mf.getIDMedFarm(), quantity);
 	}
-
-	@Override
-	public void changeValue(int sid, int value) throws RemoteException {
-		try{Class.forName(JDBC_DRIVER);
-		  System.out.println("Connecting to database...");
-		  conn = (Connection) DriverManager.getConnection(DB_URL,USER,PASS);
-	          stmt = (Statement) conn.createStatement();
-			      String sql;
-			      sql = "UPDATE STOC SET CANTITATE='"+value+"' WHERE ID="+sid;
-			      stmt.executeUpdate(sql);
-			      stmt.close();
-			      conn.close();
-			   }catch(SQLException se){
-			      se.printStackTrace();
-			   }catch(Exception e){
-			      e.printStackTrace();
-			   }finally{
-			      try{
-			         if(stmt!=null)
-			            stmt.close();
-			      }catch(SQLException se2){}
-			      try{  if(conn!=null)
-			            conn.close();
-			      }catch(SQLException se){se.printStackTrace();}
-			   }}
-
-	@Override
-	public void changeValue(Stoc s, int value) throws RemoteException {
-		if(!(this.host.equals(s.getHost())&&this.dbase.equals(s.getDBase())))
-			return ;
-		this.changeValue(s.getID(), value);}
-
 }

@@ -6,8 +6,6 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 import classes.Farmacie;
-import implement.DBManageReal;
-import interfaces.DBManageinter;
 import interfacesch.Farmacieinterch;
 
 public class Farmaciech implements Farmacieinterch {
@@ -38,7 +36,7 @@ public class Farmaciech implements Farmacieinterch {
 		  conn = (Connection) DriverManager.getConnection(DB_URL,USER,PASS);
 	          stmt = (Statement) conn.createStatement();
 			      String sql;
-			      sql = "UPDATE FARMACIE SET NUME='"+nume+"' WHERE ID="+fid;
+			      sql = "UPDATE farmacie SET nume='"+nume+"' WHERE id_farmacie="+fid;
 			      stmt.executeUpdate(sql);
 			      stmt.close();
 			      conn.close();
@@ -71,7 +69,7 @@ public class Farmaciech implements Farmacieinterch {
 		  conn = (Connection) DriverManager.getConnection(DB_URL,USER,PASS);
 	          stmt = (Statement) conn.createStatement();
 			      String sql;
-			      sql = "UPDATE FARMACIE SET ADRESA='"+adresa+"' WHERE ID="+fid;
+			      sql = "UPDATE farmacie SET adresa='"+adresa+"' WHERE id_farmacie="+fid;
 			      stmt.executeUpdate(sql);
 			      stmt.close();
 			      conn.close();
@@ -106,7 +104,7 @@ public class Farmaciech implements Farmacieinterch {
 		  conn = (Connection) DriverManager.getConnection(DB_URL,USER,PASS);
 	          stmt = (Statement) conn.createStatement();
 			      String sql;
-			      sql = "UPDATE FARMACIE SET NRTEL='"+nrtel+"' WHERE ID="+fid;
+			      sql = "UPDATE farmacie SET telefon='"+nrtel+"' WHERE id_farmacie="+fid;
 			      stmt.executeUpdate(sql);
 			      stmt.close();
 			      conn.close();
@@ -131,64 +129,6 @@ public class Farmaciech implements Farmacieinterch {
 		if(!(this.host.equals(f.getHost())&&this.dbase.equals(f.getDBase())))
 			return ;
 		this.changeNrtel(f.getID(), nrtel);
-		
-	}
-
-	@Override
-	public void changeProgram(int fid, String program) throws RemoteException {
-		try{Class.forName(JDBC_DRIVER);
-		  System.out.println("Connecting to database...");
-		  conn = (Connection) DriverManager.getConnection(DB_URL,USER,PASS);
-	          stmt = (Statement) conn.createStatement();
-			      String sql;
-			      sql = "UPDATE FARMACIE SET PROGRAM='"+program+"' WHERE ID="+fid;
-			      stmt.executeUpdate(sql);
-			      stmt.close();
-			      conn.close();
-			   }catch(SQLException se){
-			      se.printStackTrace();
-			   }catch(Exception e){
-			      e.printStackTrace();
-			   }finally{
-			      try{
-			         if(stmt!=null)
-			            stmt.close();
-			      }catch(SQLException se2){}
-			      try{  if(conn!=null)
-			            conn.close();
-			      }catch(SQLException se){se.printStackTrace();}
-			   }
-		
-	}
-
-	@Override
-	public void changeProgram(Farmacie f, String program) throws RemoteException {
-		if(!(this.host.equals(f.getHost())&&this.dbase.equals(f.getDBase())))
-			return ;
-		this.changeProgram(f.getID(), program);
-		
-	}
-
-	@Override
-	public void changeAdresa(String fNume, String adresa) throws RemoteException {
-		DBManageinter mi=new DBManageReal(this.host,this.dbase,this.USER,this.PASS);
-		Farmacie f=mi.getFarmacieNume(fNume);
-		this.changeAdresa(f, adresa);		
-	}
-
-	@Override
-	public void changeNrtel(String fNume, String nrtel) throws RemoteException {
-		DBManageinter mi=new DBManageReal(this.host,this.dbase,this.USER,this.PASS);
-		Farmacie f=mi.getFarmacieNume(fNume);
-		this.changeNrtel(f, nrtel);
-		
-	}
-
-	@Override
-	public void changeProgram(String fNume, String program) throws RemoteException {
-		DBManageinter mi=new DBManageReal(this.host,this.dbase,this.USER,this.PASS);
-		Farmacie f=mi.getFarmacieNume(fNume);
-		this.changeProgram(f, program);
 		
 	}
 }

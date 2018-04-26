@@ -7,8 +7,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import classes.Farmacie;
-import classes.Produs;
-import classes.Stoc;
+import classes.Med_Farmacie;
+import classes.Medicament;
 import interfacesch.*;
 import implement.*;
 import interfaces.DBManageinter;
@@ -35,13 +35,13 @@ public class DBManagech implements DBManageinterch{
    {return this.dbase;}
 
 @Override
-public void addFarmacie(String nume, String adresa, String nrtel, String oras, String program) throws RemoteException{
+public void addFarmacie(String nume, String adresa, String nrtel) throws RemoteException{
 	 try{Class.forName(JDBC_DRIVER);
 	  System.out.println("Connecting to database...");
 	  conn = (Connection) DriverManager.getConnection(DB_URL,USER,PASS);
           stmt = (Statement) conn.createStatement();
 		      String sql;
-		      sql = "INSERT INTO FARMACIE (NUME,ADRESA,NRTEL,ORAS,PROGRAM) VALUES ('"+nume+"','"+adresa+"','"+nrtel+"','"+oras+"','"+program+"')";
+		      sql = "INSERT INTO farmacie (nume,adresa,telefon) VALUES ('"+nume+"','"+adresa+"','"+nrtel+"')";
 		      stmt.executeUpdate(sql);
 		      stmt.close();
 		      conn.close();
@@ -60,13 +60,13 @@ public void addFarmacie(String nume, String adresa, String nrtel, String oras, S
 		   }}
 
 @Override
-public void addProdus(String nume, String clasa) throws RemoteException{
+public void addMedicament(String nume, String desc,double pret) throws RemoteException{
 	try{Class.forName(JDBC_DRIVER);
 	  System.out.println("Connecting to database...");
 	  conn = (Connection) DriverManager.getConnection(DB_URL,USER,PASS);
         stmt = (Statement) conn.createStatement();
 		      String sql;
-		      sql = "INSERT INTO PRODUS (NUME,CLASA) VALUES ('"+nume+"','"+clasa+"')";
+		      sql = "INSERT INTO medicament (nume,descriere,pret) VALUES ('"+nume+"','"+desc+"',"+pret+")";
 		      stmt.executeUpdate(sql);
 		      stmt.close();
 		      conn.close();
@@ -85,13 +85,13 @@ public void addProdus(String nume, String clasa) throws RemoteException{
 		   }}
 
 @Override
-public void addStoc(int fid, int pid, int cantitate, int val) throws RemoteException{
+public void addMed_Farmacie(int id_farmacie, int id_medicament, int cantitate) throws RemoteException{
 	try{Class.forName(JDBC_DRIVER);
 	  System.out.println("Connecting to database...");
 	  conn = (Connection) DriverManager.getConnection(DB_URL,USER,PASS);
         stmt = (Statement) conn.createStatement();
 		      String sql;
-		      sql = "INSERT INTO STOC (FID,PID,CANTITATE,PRET) VALUES ("+fid+","+pid+","+cantitate+","+val+")";
+		      sql = "INSERT INTO STOC (id_farmacie,id_medicament,cantitate) VALUES ("+id_farmacie+","+id_medicament+","+cantitate+")";
 		      stmt.executeUpdate(sql);
 		      stmt.close();
 		      conn.close();
@@ -110,38 +110,38 @@ public void addStoc(int fid, int pid, int cantitate, int val) throws RemoteExcep
 		   }}
 
 @Override
-public void addStoc(String fNume, String pNume, int cantitate, int val) throws RemoteException{
+public void addMed_Farmacie(String fNume, String pNume, int cantitate) throws RemoteException{
 	DBManageinter mi=new DBManageReal(this.host,this.dbase,this.USER,this.PASS);
 		Farmacie f=mi.getFarmacieNume(fNume);
-		Produs p=mi.getProductName(pNume);
-		if(!(this.host.equals(p.getHost())&&this.dbase.equals(p.getDBase()))||!(this.host.equals(f.getHost())&&this.dbase.equals(f.getDBase())))
+		Medicament m=mi.getMedicamentName(pNume);
+		if(!(this.host.equals(m.getHost())&&this.dbase.equals(m.getDBase()))||!(this.host.equals(f.getHost())&&this.dbase.equals(f.getDBase())))
 			return ;
-		this.addStoc(f.getID(), p.getID(), cantitate, val);}
+		this.addMed_Farmacie(f.getID(), m.getID(), cantitate);}
 
 @Override
-public void addStoc(Farmacie f, Produs p, int cantitate, int val) throws RemoteException {
-	if(!(this.host.equals(p.getHost())&&this.dbase.equals(p.getDBase()))||!(this.host.equals(f.getHost())&&this.dbase.equals(f.getDBase())))
+public void addMed_Farmacie(Farmacie f, Medicament m, int cantitate) throws RemoteException {
+	if(!(this.host.equals(m.getHost())&&this.dbase.equals(m.getDBase()))||!(this.host.equals(f.getHost())&&this.dbase.equals(f.getDBase())))
 		return ;
-	this.addStoc(f.getID(), p.getID(), cantitate, val);}
+	this.addMed_Farmacie(f.getID(), m.getID(), cantitate);}
 
 
 
 @Override
-public void deleteStoc(Farmacie f, Produs p) throws RemoteException {
+public void deleteMed_Farmacie(Farmacie f, Medicament p) throws RemoteException {
 	if(!(this.host.equals(p.getHost())&&this.dbase.equals(p.getDBase()))||!(this.host.equals(f.getHost())&&this.dbase.equals(f.getDBase())))
 		return ;
-	this.deleteStoc(f.getID(), p.getID());
+	this.deleteMed_Farmacie(f.getID(), p.getID());
 	
 }
 
 @Override
-public void deleteStoc(int fid, int pid) throws RemoteException {
+public void deleteMed_Farmacie(int id_farmacie, int id_medicament) throws RemoteException {
 	try{Class.forName(JDBC_DRIVER);
 	  System.out.println("Connecting to database...");
 	  conn = (Connection) DriverManager.getConnection(DB_URL,USER,PASS);
         stmt = (Statement) conn.createStatement();
 		      String sql;
-		      sql = "DELETE * FROM STOC WHERE FID="+fid+" AND PID="+pid;
+		      sql = "DELETE * FROM med_farmacie WHERE id_farmacie="+id_farmacie+" AND id_medicament="+id_medicament;
               stmt.executeUpdate(sql);
 		      stmt.close();
 		      conn.close();
@@ -162,31 +162,21 @@ public void deleteStoc(int fid, int pid) throws RemoteException {
 }
 
 @Override
-public void deleteStoc(String fNume, String pNume) throws RemoteException {
-	DBManageinter mi=new DBManageReal(this.host,this.dbase,this.USER,this.PASS);
-	Farmacie f=mi.getFarmacieNume(fNume);
-	Produs p=mi.getProductName(pNume);
-	if(!(this.host.equals(p.getHost())&&this.dbase.equals(p.getDBase()))||!(this.host.equals(f.getHost())&&this.dbase.equals(f.getDBase())))
-		return ;
-	this.deleteStoc(f.getID(), p.getID());
-}
-
-@Override
-public void deleteStoc(Stoc s) throws RemoteException {
+public void deleteMed_Farmacie(Med_Farmacie s) throws RemoteException {
 	if(!(this.host.equals(s.getHost())&&this.dbase.equals(s.getDBase())))
 		return ;
-	this.deleteStoc(s.getID());
+	this.deleteMed_Farmacie(s.getIDMedFarm());
 	
 }
 
 @Override
-public void deleteStoc(int sid) throws RemoteException {
+public void deleteMed_Farmacie(int id_med_farmacie) throws RemoteException {
 	try{Class.forName(JDBC_DRIVER);
 	  System.out.println("Connecting to database...");
 	  conn = (Connection) DriverManager.getConnection(DB_URL,USER,PASS);
       stmt = (Statement) conn.createStatement();
 		      String sql;
-		      sql = "DELETE * FROM STOC WHERE ID="+sid;
+		      sql = "DELETE * FROM med_farmacie WHERE ID="+id_med_farmacie;
               stmt.executeUpdate(sql);
 		      stmt.close();
 		      conn.close();
@@ -207,21 +197,21 @@ public void deleteStoc(int sid) throws RemoteException {
 }
 
 @Override
-public void deleteProdus(Produs p) throws RemoteException {
-	if(!(this.host.equals(p.getHost())&&this.dbase.equals(p.getDBase())))
+public void deleteMedicament(Medicament m) throws RemoteException {
+	if(!(this.host.equals(m.getHost())&&this.dbase.equals(m.getDBase())))
 		return ;
-	this.deleteProdus(p.getID());
+	this.deleteMedicament(m.getID());
 	
 }
 
 @Override
-public void deleteProdus(int pid) throws RemoteException {
+public void deleteMedicament(int id_medicament) throws RemoteException {
 	try{Class.forName(JDBC_DRIVER);
 	  System.out.println("Connecting to database...");
 	  conn = (Connection) DriverManager.getConnection(DB_URL,USER,PASS);
       stmt = (Statement) conn.createStatement();
 		      String sql;
-		      sql = "DELETE S.*,P.* FROM STOC S,PRODUS P WHERE P.ID=S.PID AND P.ID="+pid;
+		      sql = "DELETE S.*,P.* FROM med_farmacie S,medicament P WHERE P.id_medicament=S.id_medicament AND P.id_medicament="+id_medicament;
 		      stmt.executeUpdate(sql);
 		      stmt.close();
 		      conn.close();
@@ -241,12 +231,12 @@ public void deleteProdus(int pid) throws RemoteException {
 
 
 @Override
-public void deleteProdus(String pNume) throws RemoteException {
+public void deleteMedicament(String mNume) throws RemoteException {
 	DBManageinter mi=new DBManageReal(this.host,this.dbase,this.USER,this.PASS);
-	Produs p=mi.getProductName(pNume);
+	Medicament p=mi.getMedicamentName(mNume);
 	if(!(this.host.equals(p.getHost())&&this.dbase.equals(p.getDBase())))
 		return ;
-	this.deleteProdus(p.getID());
+	this.deleteMedicament(p.getID());
 	
 }
 
@@ -259,13 +249,13 @@ public void deleteFarmacie(Farmacie f) throws RemoteException {
 }
 
 @Override
-public void deleteFarmacie(int fid) throws RemoteException {
+public void deleteFarmacie(int id_farmacie) throws RemoteException {
 	try{Class.forName(JDBC_DRIVER);
 	  System.out.println("Connecting to database...");
 	  conn = (Connection) DriverManager.getConnection(DB_URL,USER,PASS);
     stmt = (Statement) conn.createStatement();
 		      String sql;
-		      sql = "DELETE S.*,F.* FROM STOC S,FARMACIE F WHERE F.ID=S.FID AND F.ID="+fid;
+		      sql = "DELETE S.*,F.* FROM med_farmacie S,farmacie F WHERE F.id_med_farmacie=S.id_med_farmacie AND F.id_farmacie="+id_farmacie;
 		      stmt.executeUpdate(sql);
 		      stmt.close();
 		      conn.close();

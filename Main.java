@@ -2,9 +2,9 @@ import java.util.List;
 
 import classes.*;
 import interfaces.*;
-import interfacesch.DBManageinterch;
+import interfacesch.*;
 import implement.*;
-import implementch.DBManagech;
+import implementch.*;
 public class Main {
     public static void main(String args[]) {
         List<Farmacie> l;

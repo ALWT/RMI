@@ -6,7 +6,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import classes.Produs;
+import classes.Medicament;
 import interfacesch.Medicamentinterch;
 
 public class Medicamentch implements Medicamentinterch {
@@ -37,7 +37,7 @@ public class Medicamentch implements Medicamentinterch {
 		  conn = (Connection) DriverManager.getConnection(DB_URL,USER,PASS);
 	          stmt = (Statement) conn.createStatement();
 			      String sql;
-			      sql = "UPDATE PRODUS SET NUME='"+nume+"' WHERE ID="+pid;
+			      sql = "UPDATE medicament SET nume='"+nume+"' WHERE id_medicament="+pid;
 			      stmt.executeUpdate(sql);
 			      stmt.close();
 			      conn.close();
@@ -56,19 +56,19 @@ public class Medicamentch implements Medicamentinterch {
 			   }}
 
 	@Override
-	public void changeNume(Produs p, String nume) throws RemoteException {
+	public void changeNume(Medicament p, String nume) throws RemoteException {
 		if(!(this.host.equals(p.getHost())&&this.dbase.equals(p.getDBase())))
 			return ;
 		this.changeNume(p.getID(), nume);}
 
 	@Override
-	public void changeClasa(int pid, String clasa) throws RemoteException {
+	public void changeDescriere(int pid, String clasa) throws RemoteException {
 		try{Class.forName(JDBC_DRIVER);
 		  System.out.println("Connecting to database...");
 		  conn = (Connection) DriverManager.getConnection(DB_URL,USER,PASS);
 	          stmt = (Statement) conn.createStatement();
 			      String sql;
-			      sql = "UPDATE PRODUS SET CLASA='"+clasa+"' WHERE ID="+pid;
+			      sql = "UPDATE medicament SET descriere='"+clasa+"' WHERE id_medicament="+pid;
 			      stmt.executeUpdate(sql);
 			      stmt.close();
 			      conn.close();
@@ -87,9 +87,76 @@ public class Medicamentch implements Medicamentinterch {
 			   }}
 
 	@Override
-	public void changeClasa(Produs p, String clasa) throws RemoteException {
+	public void changeDescriere(Medicament p, String clasa) throws RemoteException {
 		if(!(this.host.equals(p.getHost())&&this.dbase.equals(p.getDBase())))
 			return ;
-		this.changeClasa(p.getID(), clasa);}
+		this.changeDescriere(p.getID(), clasa);}
+
+	@Override
+	public void changePret(int pid, double pret) throws RemoteException {
+		try{Class.forName(JDBC_DRIVER);
+		  System.out.println("Connecting to database...");
+		  conn = (Connection) DriverManager.getConnection(DB_URL,USER,PASS);
+	          stmt = (Statement) conn.createStatement();
+			      String sql;
+			      sql = "UPDATE medicament SET pret="+pret+" WHERE id_medicament="+pid;
+			      stmt.executeUpdate(sql);
+			      stmt.close();
+			      conn.close();
+			   }catch(SQLException se){
+			      se.printStackTrace();
+			   }catch(Exception e){
+			      e.printStackTrace();
+			   }finally{
+			      try{
+			         if(stmt!=null)
+			            stmt.close();
+			      }catch(SQLException se2){}
+			      try{  if(conn!=null)
+			            conn.close();
+			      }catch(SQLException se){se.printStackTrace();}
+			   }}
+
+	@Override
+	public void changePret(Medicament p,double pret) throws RemoteException {
+		if(!(this.host.equals(p.getHost())&&this.dbase.equals(p.getDBase())))
+			return ;
+		this.changePret(p.getID(), pret);
+		
+	}
+
+	@Override
+	public void changePoza(int pid, String poza) throws RemoteException {
+		try{Class.forName(JDBC_DRIVER);
+		  System.out.println("Connecting to database...");
+		  conn = (Connection) DriverManager.getConnection(DB_URL,USER,PASS);
+	          stmt = (Statement) conn.createStatement();
+			      String sql;
+			      sql = "UPDATE medicament SET poza='"+poza+"' WHERE id_medicament="+pid;
+			      stmt.executeUpdate(sql);
+			      stmt.close();
+			      conn.close();
+			   }catch(SQLException se){
+			      se.printStackTrace();
+			   }catch(Exception e){
+			      e.printStackTrace();
+			   }finally{
+			      try{
+			         if(stmt!=null)
+			            stmt.close();
+			      }catch(SQLException se2){}
+			      try{  if(conn!=null)
+			            conn.close();
+			      }catch(SQLException se){se.printStackTrace();}
+			   }
+	}
+
+	@Override
+	public void changePoza(Medicament p, String poza) throws RemoteException {
+		if(!(this.host.equals(p.getHost())&&this.dbase.equals(p.getDBase())))
+			return ;
+		this.changePoza(p.getID(), poza);
+		
+	}
 
 }

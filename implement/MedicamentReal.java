@@ -37,6 +37,8 @@ public class MedicamentReal implements Medicamentinter{
     
 	@Override
 	public List<Med_Farmacie> getMed_Farm(Medicament p) throws RemoteException {
+		if(p==null)
+			return null;
 		if(!(this.host.equals(p.getHost())&&this.dbase.equals(p.getDBase())))
 	    	return null;
 		return this.getMed_Farm(p.getID());
@@ -204,6 +206,8 @@ public class MedicamentReal implements Medicamentinter{
 	}
 	
 	public List<Farmacie> getFarm(Medicament p) throws RemoteException {
+		if(p==null)
+			return null;
 		if(!(this.host.equals(p.getHost())&&this.dbase.equals(p.getDBase())))
 	    	return null;
 		return this.getFarm(p.getID());
@@ -211,6 +215,8 @@ public class MedicamentReal implements Medicamentinter{
 	
 	
 	public Med_Farmacie getMed_Farm(Medicament p,Farmacie f) throws RemoteException {
+        if(p==null || f==null)
+        	return null;
 		if(!(this.host.equals(p.getHost())&&this.dbase.equals(p.getDBase()))||!(this.host.equals(f.getHost())&&this.dbase.equals(f.getDBase())))
 			return null;
 		return this.getMed_Farm(p.getID(), f.getID());

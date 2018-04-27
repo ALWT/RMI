@@ -177,7 +177,7 @@ public void deleteMed_Farmacie(int id_med_farmacie) throws RemoteException {
 	  conn = (Connection) DriverManager.getConnection(DB_URL,USER,PASS);
       stmt = (Statement) conn.createStatement();
 		      String sql;
-		      sql = "DELETE * FROM med_farmacie WHERE ID="+id_med_farmacie;
+		      sql = "DELETE FROM med_farmacie WHERE id_medfarm="+id_med_farmacie;
               stmt.executeUpdate(sql);
 		      stmt.close();
 		      conn.close();
@@ -212,7 +212,9 @@ public void deleteMedicament(int id_medicament) throws RemoteException {
 	  conn = (Connection) DriverManager.getConnection(DB_URL,USER,PASS);
       stmt = (Statement) conn.createStatement();
 		      String sql;
-		      sql = "DELETE S,P FROM med_farmacie S RIGHT JOIN medicament P ON P.id_medicament=S.id_medicament WHERE P.id_medicament="+id_medicament;
+		      sql = "DELETE FROM med_farmacie WHERE id_medicament="+id_medicament;
+		      stmt.executeUpdate(sql);
+		      sql="DELETE FROM medicament WHERE id_medicament="+id_medicament;	
 		      stmt.executeUpdate(sql);
 		      stmt.close();
 		      conn.close();
@@ -257,7 +259,9 @@ public void deleteFarmacie(int id_farmacie) throws RemoteException {
 	  conn = (Connection) DriverManager.getConnection(DB_URL,USER,PASS);
     stmt = (Statement) conn.createStatement();
 		      String sql;
-		      sql = "DELETE S,F FROM med_farmacie S RIGHT JOIN farmacie F ON F.id_farmacie=S.id_farmacie WHERE F.id_farmacie="+id_farmacie;
+		      sql = "DELETE FROM med_farmacie WHERE id_medicament="+id_farmacie;
+		      stmt.executeUpdate(sql);
+		      sql="DELETE FROM farmacie WHERE id_farmacie="+id_farmacie;;
 		      stmt.executeUpdate(sql);
 		      stmt.close();
 		      conn.close();

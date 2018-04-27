@@ -28,11 +28,12 @@ public class Main {
     		System.out.println(m.getID()+" "+m.getNume()+"  "+m.getPoza()+" "+m.getPret()+" "+pi.getMed_Farm(m,f).getCantitate());
     	
     	
-    	}
+    	}Med_Farmacie mf;
+    	if((mf=pi.getMed_Farm(ai.getMedicamentName("AspirinaL"), ai.getFarmacieNume("FarmanotL.srl")))!=null)
+        	dbmch.deleteMed_Farmacie(mf);
     	dbmch.deleteMedicament("AspirinaL");
     	dbmch.deleteFarmacie("FarmanotL.srl");
     	
-    	//dbmch.deleteMed_Farmacie(pi.getMed_Farm(ai.getMedicamentName("AspirinaL"), ai.getFarmacieNume("FarmanotL.srl")));
         }
         catch(Exception e)
         {e.printStackTrace();}

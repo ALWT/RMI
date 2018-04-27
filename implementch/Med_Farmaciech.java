@@ -37,7 +37,7 @@ public class Med_Farmaciech implements Med_Farmacieinterch {
 		  conn = (Connection) DriverManager.getConnection(DB_URL,USER,PASS);
 	          stmt = (Statement) conn.createStatement();
 			      String sql;
-			      sql = "UPDATE med_farmacie SET cantitate="+quantity+" WHERE ID="+id_med_farmacie;
+			      sql = "UPDATE med_farmacie SET cantitate="+quantity+" WHERE id_medfarm="+id_med_farmacie;
 			      stmt.executeUpdate(sql);
 			      stmt.close();
 			      conn.close();

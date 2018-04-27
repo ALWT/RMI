@@ -1,5 +1,5 @@
 package classes;
-import java.rmi.*;
+
 
 
 
@@ -22,31 +22,31 @@ public class Medicament implements java.io.Serializable
 	    this.dbase=dbase;
      }
     
-    public int getID() throws RemoteException
+    public int getID()
     {
     	return this.id_medicament;
     }
-    public String getNume() throws RemoteException
+    public String getNume()
     {
     	return this.nume;
     }
-    public String getPoza() throws RemoteException
+    public String getPoza()
     {
     	return this.poza;
     }
-    public String getDescriere() throws RemoteException
+    public String getDescriere()
     {
     	return this.descriere;
     }
-    public double getPret() throws RemoteException
+    public double getPret()
     {
     	return this.pret;
     }
-    public String getHost() throws RemoteException
+    public String getHost()
     {
     	return this.host;
     }
-    public String getDBase() throws RemoteException
+    public String getDBase()
     {
     	return this.dbase;
     }

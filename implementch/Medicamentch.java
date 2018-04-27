@@ -1,6 +1,5 @@
 package implementch;
 
-import java.rmi.RemoteException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -24,14 +23,14 @@ public class Medicamentch implements Medicamentinterch {
      this.DB_URL= "jdbc:mysql://"+host+"/"+this.dbase;
     }
    
-   public String getHost() throws RemoteException
+   public String getHost() 
    {return this.host;}
    
-   public String getDBase() throws RemoteException
+   public String getDBase() 
    {return this.dbase;}
    
 	@Override
-	public void changeNume(int pid, String nume) throws RemoteException {
+	public void changeNume(int pid, String nume)  {
 		try{Class.forName(JDBC_DRIVER);
 		  System.out.println("Connecting to database...");
 		  conn = (Connection) DriverManager.getConnection(DB_URL,USER,PASS);
@@ -56,13 +55,13 @@ public class Medicamentch implements Medicamentinterch {
 			   }}
 
 	@Override
-	public void changeNume(Medicament p, String nume) throws RemoteException {
+	public void changeNume(Medicament p, String nume)  {
 		if(!(this.host.equals(p.getHost())&&this.dbase.equals(p.getDBase())))
 			return ;
 		this.changeNume(p.getID(), nume);}
 
 	@Override
-	public void changeDescriere(int pid, String clasa) throws RemoteException {
+	public void changeDescriere(int pid, String clasa)  {
 		try{Class.forName(JDBC_DRIVER);
 		  System.out.println("Connecting to database...");
 		  conn = (Connection) DriverManager.getConnection(DB_URL,USER,PASS);
@@ -87,13 +86,13 @@ public class Medicamentch implements Medicamentinterch {
 			   }}
 
 	@Override
-	public void changeDescriere(Medicament p, String clasa) throws RemoteException {
+	public void changeDescriere(Medicament p, String clasa)  {
 		if(!(this.host.equals(p.getHost())&&this.dbase.equals(p.getDBase())))
 			return ;
 		this.changeDescriere(p.getID(), clasa);}
 
 	@Override
-	public void changePret(int pid, double pret) throws RemoteException {
+	public void changePret(int pid, double pret)  {
 		try{Class.forName(JDBC_DRIVER);
 		  System.out.println("Connecting to database...");
 		  conn = (Connection) DriverManager.getConnection(DB_URL,USER,PASS);
@@ -118,7 +117,7 @@ public class Medicamentch implements Medicamentinterch {
 			   }}
 
 	@Override
-	public void changePret(Medicament p,double pret) throws RemoteException {
+	public void changePret(Medicament p,double pret)  {
 		if(!(this.host.equals(p.getHost())&&this.dbase.equals(p.getDBase())))
 			return ;
 		this.changePret(p.getID(), pret);
@@ -126,7 +125,7 @@ public class Medicamentch implements Medicamentinterch {
 	}
 
 	@Override
-	public void changePoza(int pid, String poza) throws RemoteException {
+	public void changePoza(int pid, String poza)  {
 		try{Class.forName(JDBC_DRIVER);
 		  System.out.println("Connecting to database...");
 		  conn = (Connection) DriverManager.getConnection(DB_URL,USER,PASS);
@@ -152,7 +151,7 @@ public class Medicamentch implements Medicamentinterch {
 	}
 
 	@Override
-	public void changePoza(Medicament p, String poza) throws RemoteException {
+	public void changePoza(Medicament p, String poza)  {
 		if(!(this.host.equals(p.getHost())&&this.dbase.equals(p.getDBase())))
 			return ;
 		this.changePoza(p.getID(), poza);

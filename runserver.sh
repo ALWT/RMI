@@ -1,4 +1,4 @@
 #!/bin/bash
-#rmiregistry &
-java -Djava.rmi.server.codebase=http://$1/RMI/serer.jar -Djava.rmi.server.hostname=$1 -Djava.security.policy=server.policy ComputeEngine $1 "Test" root ""
+rmiregistry &
+java -cp .:mysql-connector-java-5.1.46.jar -Djava.rmi.server.codebase=http://$3/RMImain/bin -Djava.rmi.server.hostname=$3 -Djava.security.policy=server.policy MainRMI $1 $2 root ""
 #./server.jar -cp .:server.jar -Djava.rmi.server.codebase=http://$1/RMI/server.jar -Djava.rmi.server.hostname=$1 -Djava.security.policy=server.policy $1 "Test" root ""

@@ -1,6 +1,5 @@
 package implementch;
 
-import java.rmi.RemoteException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -24,14 +23,14 @@ public class Med_Farmaciech implements Med_Farmacieinterch {
      this.DB_URL= "jdbc:mysql://"+host+"/"+this.dbase;
     }
    
-   public String getHost() throws RemoteException
+   public String getHost() 
    {return this.host;}
    
-   public String getDBase() throws RemoteException
+   public String getDBase() 
    {return this.dbase;}
 	
     @Override
-	public void changeQuantity(int id_med_farmacie, int quantity) throws RemoteException {
+	public void changeQuantity(int id_med_farmacie, int quantity)  {
     	try{Class.forName(JDBC_DRIVER);
 		  System.out.println("Connecting to database...");
 		  conn = (Connection) DriverManager.getConnection(DB_URL,USER,PASS);
@@ -56,7 +55,7 @@ public class Med_Farmaciech implements Med_Farmacieinterch {
 			   }}
 
 	@Override
-	public void changeQuantity(Med_Farmacie mf, int quantity) throws RemoteException {
+	public void changeQuantity(Med_Farmacie mf, int quantity)  {
 		if(!(this.host.equals(mf.getHost())&&this.dbase.equals(mf.getDBase())))
 			return ;
 		this.changeQuantity(mf.getIDMedFarm(), quantity);

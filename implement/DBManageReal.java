@@ -1,5 +1,5 @@
 package implement;
-
+import java.rmi.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -10,65 +10,91 @@ import java.util.List;
 import classes.*;
 import interfaces.*;
 
-public class DBManageReal implements DBManageinter {
+public class DBManageReal implements DBManageinter 
+{
     private String JDBC_DRIVER = "com.mysql.jdbc.Driver",host;  
 	private String DB_URL,dbase;
 	private String USER;
 	private String PASS;
 	private Connection conn = null;
 	private Statement stmt = null;
+	
     public DBManageReal(String host,String dbase,String USER,String PASS)
-    {this.host=host;
+    {
+    	this.host=host;
      this.dbase=(dbase==null)?"Test":dbase;
      this.USER=(USER==null)?"root":USER;
      this.PASS=(PASS==null)?"":PASS;
      this.DB_URL= "jdbc:mysql://"+host+"/"+this.dbase;
     }
    
-   public String getHost()
+   public String getHost() throws RemoteException
    {return this.host;}
    
-   public String getDBase()
+   public String getDBase() throws RemoteException
    {return this.dbase;}
 
-   public List<Farmacie> getFarmacii()
-     {List<Farmacie> ls=new ArrayList<Farmacie>();
+   public List<Farmacie> getFarmacii() throws RemoteException
+   {
+	  List<Farmacie> ls=new ArrayList<Farmacie>();
       int id;      
       String nume,adresa,nrtel;   
-        try{Class.forName(JDBC_DRIVER);
-	  System.out.println("Connecting to database...");
-	  conn = (Connection) DriverManager.getConnection(DB_URL,USER,PASS);
-           stmt = (Statement) conn.createStatement();
-		      String sql;
-		      sql = "SELECT * FROM farmacie";
-		      ResultSet rs = stmt.executeQuery(sql);
+      try
+      {
+    	  Class.forName(JDBC_DRIVER);
+		  System.out.println("Connecting to database...");
+		  conn = (Connection) DriverManager.getConnection(DB_URL,USER,PASS);
+          stmt = (Statement) conn.createStatement();
+          
+	      String sql;
+	      sql = "SELECT * FROM farmacie";
+	      ResultSet rs = stmt.executeQuery(sql);
 		      
-                      while(rs.next())
-                      {id  = rs.getInt("id_farmacie");
-		         nume = rs.getString("nume");
-                         adresa = rs.getString("adresa");
-                         nrtel = rs.getString("telefon");
-                         ls.add(new Farmacie(id,nume,adresa,nrtel,host,dbase));}
+          while(rs.next())
+          {
+	    	  id  = rs.getInt("id_farmacie");
+	    	  nume = rs.getString("nume");
+              adresa = rs.getString("adresa");
+              nrtel = rs.getString("telefon");
+              ls.add(new Farmacie(id,nume,adresa,nrtel,host,dbase));
+          }
 		     
-		      rs.close();
-		      stmt.close();
-		      conn.close();
-		   }catch(SQLException se){
+	      rs.close();
+	      stmt.close();
+	      conn.close();
+		   }
+      	catch(SQLException se)
+      	{
 		      se.printStackTrace();
-		   }catch(Exception e){
-		      e.printStackTrace();
-		   }finally{
-		      try{
+		}
+      
+      	catch(Exception e)
+        {
+		      e.printStackTrace();   
+        }
+      finally
+      {
+		      try
+		      {
 		         if(stmt!=null)
 		            stmt.close();
-		      }catch(SQLException se2){}
-		      try{  if(conn!=null)
+		      }
+		      catch(SQLException se2){}
+		      try
+		      { 
+		    	  if(conn!=null)
 		            conn.close();
-		      }catch(SQLException se){se.printStackTrace();}
-		   }
-       return ls;}    
-
-    public Farmacie getFarmacieId(int FID)
+		      }
+		      catch(SQLException se)
+		      {
+		    	  se.printStackTrace();
+		      }
+      }
+       return ls;
+   } 
+   //astA AM SCRIS EU
+   
+    public Farmacie getFarmacieId(int FID) throws RemoteException
      {int id;    
      Farmacie f=null;
       String nume,adresa,nrtel;   
@@ -105,7 +131,7 @@ public class DBManageReal implements DBManageinter {
 		   }
        return f;}
 
-    public Farmacie getFarmacieNume(String nume)
+    public Farmacie getFarmacieNume(String nume) throws RemoteException
          {int id; 
          Farmacie f=null;
       String adresa,nrtel;   
@@ -140,7 +166,7 @@ public class DBManageReal implements DBManageinter {
 		   }
        return f;}
 
-    public Med_Farmacie getStocID(int id_medfarm)
+    public Med_Farmacie getStocID(int id_medfarm) throws RemoteException
          {int id,fid,pid,cant;      
          Med_Farmacie s=null;
         try{Class.forName(JDBC_DRIVER);
@@ -148,7 +174,7 @@ public class DBManageReal implements DBManageinter {
 	  conn = (Connection) DriverManager.getConnection(DB_URL,USER,PASS);
            stmt = (Statement) conn.createStatement();
 		      String sql;
-		      sql = "SELECT * FROM med_farmacie WHERE if_medfarm="+id_medfarm;
+		      sql = "SELECT * FROM med_farmacie WHERE id_medfarm="+id_medfarm;
 		      ResultSet rs = stmt.executeQuery(sql);
 		      
                       if(rs.next())
@@ -176,7 +202,7 @@ public class DBManageReal implements DBManageinter {
 		   }
        return s;}
 
-    public Medicament getMedicamentID(int PID)
+    public Medicament getMedicamentID(int PID) throws RemoteException
        {int id_medicament;
        Medicament p=null;
         String nume,poza,descriere;
@@ -215,48 +241,68 @@ public class DBManageReal implements DBManageinter {
 		   }
        return p;}
     
-    public Medicament getMedicamentName(String name)
- {int id_medicament;
- Medicament p=null;
- String nume,poza,descriere;
- double pret;  
-        try{Class.forName("com.mysql.jdbc.Driver");
-	  System.out.println("Connecting to database...");
-	  conn = (Connection) DriverManager.getConnection(DB_URL,USER,PASS);
-            stmt = (Statement) conn.createStatement();
-		      String sql;
-		      sql = "SELECT * FROM medicament WHERE nume='"+name+"'";
-		      ResultSet rs = stmt.executeQuery(sql);
+    public Medicament getMedicamentName(String name) throws RemoteException
+    {
+    	int id_medicament;
+		 Medicament p=null;
+		 String nume,poza,descriere;
+		 double pret;  
+		 
+		 try{
+			 Class.forName("com.mysql.jdbc.Driver");
+			 System.out.println("Connecting to database...");
+			 
+			 conn = (Connection) DriverManager.getConnection(DB_URL,USER,PASS);
+			 stmt = (Statement)conn.createStatement();
+			 
+		     String sql;
+		     sql = "SELECT * FROM medicament WHERE nume='"+name+"'";
+		     ResultSet rs = stmt.executeQuery(sql);
 		      
-                      if(rs.next())
-                      {id_medicament=rs.getInt("id_medicament");
-                      nume=rs.getString("nume");
-                      pret=rs.getDouble("pret");
-                      poza=rs.getString("poza");
-                      descriere=rs.getString("descriere");
-                      p=new Medicament(id_medicament,nume, pret, poza, descriere, host, dbase);}
-		     
-		      rs.close();
-		      stmt.close();
-		      conn.close();
-		   }catch(SQLException se){
-		      se.printStackTrace();
-		   }catch(Exception e){
+             if(rs.next())
+             {
+            	  id_medicament=rs.getInt("id_medicament");
+            	  nume=rs.getString("nume");
+            	  pret=rs.getDouble("pret");
+            	  poza=rs.getString("poza");
+            	  descriere=rs.getString("descriere");
+            	  p=new Medicament(id_medicament,nume, pret, poza, descriere, host, dbase);
+             }
+             
+		     rs.close();
+		     stmt.close();
+		     conn.close();
+		   	}
+		 	catch(SQLException se)
+		 	{
+		 		se.printStackTrace();
+		 	}
+		 	catch(Exception e)
+		 	{
 		      e.printStackTrace();
-		   }finally{
-		      try{
+		 	}
+		 	finally
+		 	{
+		      try
+		      {
 		         if(stmt!=null)
 		            stmt.close();
-		      }catch(SQLException se2){}
-		      try{  if(conn!=null)
+		      }
+		      catch(SQLException se2){}
+		      
+		      try
+		      {  
+		    	  if(conn!=null)
 		            conn.close();
-		      }catch(SQLException se){se.printStackTrace();}
-		   }
-       return p;}
+		      }
+		      catch(SQLException se){se.printStackTrace();}
+		 	}
+       return p;
+}
 
 
 	@Override
-	public Farmacist getFarmacist(int id_farmacist) {
+	public Farmacist getFarmacist(int id_farmacist) throws RemoteException {
 		int id_farmacie;
 		String nume,parola;
 	       Farmacist p=null;
@@ -294,7 +340,7 @@ public class DBManageReal implements DBManageinter {
 	}
 
 	@Override
-	public Farmacist getFarmacist(Farmacie farmacie) {
+	public Farmacist getFarmacist(Farmacie farmacie) throws RemoteException {
 		int id_farmacie,id_farmacist;
 		String nume,parola;
 	       Farmacist p=null;
@@ -333,7 +379,7 @@ public class DBManageReal implements DBManageinter {
 	}
 
 	@Override
-	public Farmacist getFarmacist(String farmacist) {
+	public Farmacist getFarmacist(String farmacist) throws RemoteException {
 		int id_farmacie,id_farmacist;
 		String parola;
 	       Farmacist p=null;
@@ -342,9 +388,8 @@ public class DBManageReal implements DBManageinter {
 		  conn = (Connection) DriverManager.getConnection(DB_URL,USER,PASS);
 	            stmt = (Statement) conn.createStatement();
 			      String sql;
-			      sql = "SELECT * FROM farmacist WHERE nume='"+farmacist+"'";
-			      System.out.println(sql);
-                              ResultSet rs = stmt.executeQuery(sql);
+			      sql = "SELECT * FROM farmacist WHERE nume="+farmacist;
+			      ResultSet rs = stmt.executeQuery(sql);
 			      
 	                      if(rs.next())
 	                      {id_farmacie=rs.getInt("id_farmacie");

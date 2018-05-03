@@ -19,28 +19,28 @@ public class Farmacist implements java.io.Serializable
 	    this.host=host;
 	    this.dbase=dbase;
     }
-    public int getIDFarmacie() throws RemoteException
+    public int getIDFarmacie() 
     {
     	return this.id_farmacie;
     }
-    public int getIDFarmacist() throws RemoteException
+    public int getIDFarmacist() 
     {
     	return this.id_farmacist;
     }
-    public String getNume() throws RemoteException
+    public String getNume() 
     {
     	return this.nume;
     }
-    public String getHost() throws RemoteException
+    public String getHost() 
     {
     	return this.host;
     }
-    public String getDBase() throws RemoteException
+    public String getDBase() 
     {
     	return this.dbase;
     }
     
-    public String getParola() throws RemoteException
+    public String getParola() 
     {
     	return this.parola;
     }

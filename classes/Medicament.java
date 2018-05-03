@@ -1,5 +1,5 @@
 package classes;
-import java.rmi.*;
+
 
 
 
@@ -22,31 +22,31 @@ public class Medicament implements java.io.Serializable
 	    this.dbase=dbase;
      }
     
-    public int getID() 
+    public int getID()
     {
     	return this.id_medicament;
     }
-    public String getNume() 
+    public String getNume()
     {
     	return this.nume;
     }
-    public String getPoza() 
+    public String getPoza()
     {
     	return this.poza;
     }
-    public String getDescriere() 
+    public String getDescriere()
     {
     	return this.descriere;
     }
-    public double getPret() 
+    public double getPret()
     {
     	return this.pret;
     }
-    public String getHost() 
+    public String getHost()
     {
     	return this.host;
     }
-    public String getDBase() 
+    public String getDBase()
     {
     	return this.dbase;
     }

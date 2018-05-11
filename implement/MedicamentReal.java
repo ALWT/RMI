@@ -132,7 +132,7 @@ public class MedicamentReal implements Medicamentinter{
 			  conn = (Connection) DriverManager.getConnection(DB_URL,USER,PASS);
 		            stmt = (Statement) conn.createStatement();
 				      String sql;
-				      sql = "SELECT m.* FROM farmacie f,med_farmacie mf,medicament m WHERE mf.id_medicament=m.id_medicament AND f.id_farmacie=mf.id_farmacie AND m.id_medicament="+id_med;
+				      sql = "SELECT f.* FROM farmacie f,med_farmacie mf,medicament m WHERE mf.id_medicament=m.id_medicament AND f.id_farmacie=mf.id_farmacie AND m.id_medicament="+id_med;
 				      ResultSet rs = stmt.executeQuery(sql);
 				      
 		                      while(rs.next())

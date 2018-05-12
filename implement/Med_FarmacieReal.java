@@ -1,5 +1,5 @@
 package implement;
-import java.rmi.RemoteException;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -27,14 +27,14 @@ public class Med_FarmacieReal implements Med_Farmacieinter {
      this.DB_URL= "jdbc:mysql://"+host+"/"+this.dbase;
     }
     
-    public String getDBase() throws RemoteException
+    public String getDBase()
     {return this.dbase;}
     
-    public String getHost() throws RemoteException
+    public String getHost()
     {return this.host;}
     
 	@Override
-	public Farmacie getFarm(int sid) throws RemoteException {
+	public Farmacie getFarm(int sid) {
 	    Farmacie f=null;
 	    int id;      
 	      String nume,adresa,nrtel; 
@@ -74,14 +74,14 @@ public class Med_FarmacieReal implements Med_Farmacieinter {
 	}
 
 	@Override
-	public Farmacie getFarm(Med_Farmacie s) throws RemoteException {
+	public Farmacie getFarm(Med_Farmacie s) {
 		if(!(this.host.equals(s.getHost())&&this.dbase.equals(s.getDBase())))
 			return null;
 		return this.getFarm(s.getIDMedFarm());
 	}
 
 	@Override
-	public Medicament getMedicament(int id_med_farm) throws RemoteException {
+	public Medicament getMedicament(int id_med_farm) {
 		int id_medicament;
 	       Medicament p=null;
 	        String nume,poza,descriere;
@@ -122,7 +122,7 @@ public class Med_FarmacieReal implements Med_Farmacieinter {
 	       return p;}
 
 	@Override
-	public Medicament getMedicament(Med_Farmacie s) throws RemoteException {
+	public Medicament getMedicament(Med_Farmacie s) {
 		if(!(this.host.equals(s.getHost())&&this.dbase.equals(s.getDBase())))
 			return null;
 		return this.getMedicament(s.getIDMedFarm());

@@ -1,5 +1,5 @@
 package classes;
-import java.rmi.RemoteException;
+
 
 
 public class Farmacist implements java.io.Serializable
@@ -19,28 +19,28 @@ public class Farmacist implements java.io.Serializable
 	    this.host=host;
 	    this.dbase=dbase;
     }
-    public int getIDFarmacie() 
+    public int getIDFarmacie()
     {
     	return this.id_farmacie;
     }
-    public int getIDFarmacist() 
+    public int getIDFarmacist()
     {
     	return this.id_farmacist;
     }
-    public String getNume() 
+    public String getNume()
     {
     	return this.nume;
     }
-    public String getHost() 
+    public String getHost()
     {
     	return this.host;
     }
-    public String getDBase() 
+    public String getDBase()
     {
     	return this.dbase;
     }
     
-    public String getParola() 
+    public String getParola()
     {
     	return this.parola;
     }

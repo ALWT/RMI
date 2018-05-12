@@ -1,5 +1,5 @@
 package implement;
-import java.rmi.RemoteException;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -29,21 +29,23 @@ public class MedicamentReal implements Medicamentinter{
      this.DB_URL= "jdbc:mysql://"+host+"/"+this.dbase;
     }
 
-    public String getDBase() throws RemoteException
+    public String getDBase()
     {return this.dbase;}
     
-    public String getHost() throws RemoteException
+    public String getHost()
     {return this.host;}
     
 	@Override
-	public List<Med_Farmacie> getMed_Farm(Medicament p) throws RemoteException {
+	public List<Med_Farmacie> getMed_Farm(Medicament p) {
+		if(p==null)
+			return null;
 		if(!(this.host.equals(p.getHost())&&this.dbase.equals(p.getDBase())))
 	    	return null;
 		return this.getMed_Farm(p.getID());
 	}
 
 	@Override
-	public List<Med_Farmacie> getMed_Farm(int pid) throws RemoteException {
+	public List<Med_Farmacie> getMed_Farm(int pid) {
 		List<Med_Farmacie> ls=new ArrayList<Med_Farmacie>();
 		int id_farmacie,id_med_farm,cantitate;
 	        try{Class.forName(JDBC_DRIVER);
@@ -80,7 +82,7 @@ public class MedicamentReal implements Medicamentinter{
 	       return ls;
 	}
 	
-	public List<Med_Farmacie> getMed_Farm(String med) throws RemoteException {
+	public List<Med_Farmacie> getMed_Farm(String med) {
 		List<Med_Farmacie> ls=new ArrayList<Med_Farmacie>();
 		int id_medicament,id_med_farm,cantitate,id_farmacie; 
 	        try{Class.forName(JDBC_DRIVER);
@@ -121,26 +123,25 @@ public class MedicamentReal implements Medicamentinter{
 	
 	
 	@Override
-	public List<Farmacie> getFarm(int id_med) throws RemoteException 
+	public List<Farmacie> getFarm(int id_med) 
 		{List<Farmacie> ls=new ArrayList<Farmacie>();
 	      int id;      
 	      String nume,adresa,nrtel;  
-		        try{
-		        	 Class.forName(JDBC_DRIVER);
-		        	 System.out.println("Connecting to database...");
-		        	 conn = (Connection) DriverManager.getConnection(DB_URL,USER,PASS);
-		             stmt = (Statement) conn.createStatement();
+		        try{Class.forName(JDBC_DRIVER);
+			  System.out.println("Connecting to database...");
+			  conn = (Connection) DriverManager.getConnection(DB_URL,USER,PASS);
+		            stmt = (Statement) conn.createStatement();
 				      String sql;
 				      sql = "SELECT f.* FROM farmacie f,med_farmacie mf,medicament m WHERE mf.id_medicament=m.id_medicament AND f.id_farmacie=mf.id_farmacie AND m.id_medicament="+id_med;
 				      ResultSet rs = stmt.executeQuery(sql);
 				      
-                      while(rs.next())
-                      {id  = rs.getInt("id_farmacie");
-     		         nume = rs.getString("nume");
-                     adresa = rs.getString("adresa");
-                     nrtel = rs.getString("telefon");
-                     ls.add(new Farmacie(id,nume,adresa,nrtel,host,dbase));
-                      }
+		                      while(rs.next())
+		                      {id  = rs.getInt("id_farmacie");
+		     		         nume = rs.getString("nume");
+	                         adresa = rs.getString("adresa");
+	                         nrtel = rs.getString("telefon");
+	                         ls.add(new Farmacie(id,nume,adresa,nrtel,host,dbase));
+		                      }
 				     
 				      rs.close();
 				      stmt.close();
@@ -164,7 +165,7 @@ public class MedicamentReal implements Medicamentinter{
 	
 	
 	@Override
-	public List<Farmacie> getFarm(String p) throws RemoteException {
+	public List<Farmacie> getFarm(String p) {
 		{List<Farmacie> ls=new ArrayList<Farmacie>();
 	      int id;      
 	      String nume,adresa,nrtel;  
@@ -204,21 +205,25 @@ public class MedicamentReal implements Medicamentinter{
 		}
 	}
 	
-	public List<Farmacie> getFarm(Medicament p) throws RemoteException {
+	public List<Farmacie> getFarm(Medicament p) {
+		if(p==null)
+			return null;
 		if(!(this.host.equals(p.getHost())&&this.dbase.equals(p.getDBase())))
 	    	return null;
 		return this.getFarm(p.getID());
 	}
 	
 	
-	public Med_Farmacie getMed_Farm(Medicament p,Farmacie f) throws RemoteException {
+	public Med_Farmacie getMed_Farm(Medicament p,Farmacie f) {
+        if(p==null || f==null)
+        	return null;
 		if(!(this.host.equals(p.getHost())&&this.dbase.equals(p.getDBase()))||!(this.host.equals(f.getHost())&&this.dbase.equals(f.getDBase())))
 			return null;
 		return this.getMed_Farm(p.getID(), f.getID());
 	}
 
 	@Override
-	public Med_Farmacie getMed_Farm(int med,int farm)throws RemoteException {
+	public Med_Farmacie getMed_Farm(int med,int farm) {
 		int id,cant;      
         Med_Farmacie s=null;  
 	        try{Class.forName(JDBC_DRIVER);
@@ -257,7 +262,7 @@ public class MedicamentReal implements Medicamentinter{
 	
 
 	@Override
-	public Med_Farmacie getMed_Farm(String m,String f) throws RemoteException {
+	public Med_Farmacie getMed_Farm(String m,String f) {
 		int id,fid,pid,cant;      
         Med_Farmacie s=null; 
 	        try{Class.forName(JDBC_DRIVER);
